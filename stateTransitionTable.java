@@ -54,7 +54,7 @@ class StateTranstionTable {
             case '!': return BANG;
             case '(': return LPAREN;
             case ')': return RPAREN;
-            default:  return OTHER;
+            default:  return COL_OTHER;
         }
 }
 
