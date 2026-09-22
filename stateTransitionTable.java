@@ -30,12 +30,19 @@ class StateTranstionTable {
     public static final int FLT_LIT = 22; // float literal
     public static final int COL_OTHER = 23;   // Ccatch-all for invalid characters
 
+    public static final int[][] STATE_TRANSITION_TABLE = {
+        {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23},
+        {4, 5, 6},
+        {7, 8, 9}
+    }
+
     public static void main(String[] args) {
 
             // scanner logic\
                 // follow fsm, (i.e if character is "i", check next character if it 
                 // is "f" then it is a keyword, else it is an identifier)
 
+            // remember to actually make the input file with valid syntax
             try(Scanner scanner = new Scanner(new File("input.txt"))){
                 while(scanner.hasNextLine()){
                     String line = scanner.nextLine();
