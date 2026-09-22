@@ -1,4 +1,6 @@
-
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 class StateTranstionTable {
 
@@ -33,6 +35,15 @@ class StateTranstionTable {
             // scanner logic\
                 // follow fsm, (i.e if character is "i", check next character if it 
                 // is "f" then it is a keyword, else it is an identifier)
+
+            try(Scanner scanner = new Scanner(new File("input.txt"))){
+                while(scanner.hasNextLine()){
+                    String line = scanner.nextLine();
+                }
+            }
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
                 
     }
 
