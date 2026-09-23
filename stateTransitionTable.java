@@ -29,6 +29,7 @@ class StateTranstionTable {
     public static final int R_COL = 21;      // r
     public static final int N_COL = 22;      // n
     public static final int UNDERSCORE = 23; // _
+    public static final int COL_OTHER = 24;  // other characters
 
     // rows
     public static final int START = 0;
