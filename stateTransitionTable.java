@@ -5,32 +5,33 @@ import java.io.FileNotFoundException;
 class StateTranstionTable {
 
     // columns
-    public static final int START = 0;
-    public static final int LETTER = 1;      // a-z, A-Z
-    public static final int DIGIT = 2;       // 0-9
-    public static final int DOT = 3;         // . (for floats)
-    public static final int PLUS = 4;        // +
-    public static final int MINUS = 5;       // -
-    public static final int STAR = 6;        // *
-    public static final int SLASH = 7;       // /
-    public static final int EQUAL = 8;       // =
-    public static final int LESS = 9;        // <
-    public static final int GREATER = 10;    // >
-    public static final int BANG = 11;       // !
-    public static final int LPAREN = 12;      // (       
-    public static final int RPAREN = 13;     // ): right parenthesis
-    public static final int E_COL = 14;
-    public static final int L_COL = 15;
-    public static final int S_COL = 16;
-    public static final int I_COL = 17;
-    public static final int F_COL = 18;
-    public static final int W_COL = 19;
-    public static final int H_COL = 20;
-    public static final int O_COL = 21;
-    public static final int R_COL = 22;
-    public static final int N_COL = 23;
+    public static final int LETTER = 0;      // a-z, A-Z
+    public static final int DIGIT = 1;       // 0-9
+    public static final int DOT = 2;         // . (for floats)
+    public static final int PLUS = 3;        // +
+    public static final int MINUS = 4;       // -
+    public static final int STAR = 5;        // *
+    public static final int SLASH = 6;       // /
+    public static final int EQUAL = 7;       // =
+    public static final int LESS = 8;        // <
+    public static final int GREATER = 9;     // >
+    public static final int BANG = 10;       // !
+    public static final int LPAREN = 11;     // (
+    public static final int RPAREN = 12;     // ): right parenthesis
+    public static final int E_COL = 13;      // e
+    public static final int L_COL = 14;      // l
+    public static final int S_COL = 15;      // s
+    public static final int I_COL = 16;      // i
+    public static final int F_COL = 17;      // f
+    public static final int W_COL = 18;      // w
+    public static final int H_COL = 19;      // h
+    public static final int O_COL = 20;      // o
+    public static final int R_COL = 21;      // r
+    public static final int N_COL = 22;      // n
+    public static final int UNDERSCORE = 23; // _
 
     // rows
+    public static final int START = 0;
     public static final int INT_LIT = 1;
     public static final int FLOAT_LIT = 2;
     public static final int VAR_IDF = 3;
@@ -56,10 +57,10 @@ class StateTranstionTable {
 
 
     public static final int[][] STATE_TRANSITION_TABLE = {
-        {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24},
-        {4, 5, 6},
-        {7, 8, 9}
-    };
+    { VAR_IDF, INT_LIT, -1,        PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_STATE, OPEN_PAREN, CLOSE_PAREN, -1,    E_STATE, VAR_IDF, VAR_IDF, I_STATE, F_STATE, W_STATE, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF }, // START
+    { -1,      INT_LIT, DOT_STATE, -1,      -1,     -1,      -1,     -1,        -1,        -1,         -1,         -1,         -1,          -1,    -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1      }, // INT_LIT
+    // ...one row like this for every state, in the same order as your row constants
+};
 
     public static void main(String[] args) {
 
