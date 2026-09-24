@@ -28,8 +28,9 @@ class StateTranstionTable {
     public static final int O_COL = 20;      // o
     public static final int R_COL = 21;      // r
     public static final int N_COL = 22;      // n
-    public static final int UNDERSCORE = 23; // _
+    public static final int COLON = 23;      // :
     public static final int COL_OTHER = 24;  // other characters
+    public static final int NUM_COLS = 25;   // number of columns
 
     // rows
     public static final int START = 0;
@@ -43,7 +44,7 @@ class StateTranstionTable {
     public static final int IF_KWD = 8;
     public static final int FOR_KWD = 9;
     public static final int ELIF_KWD = 10;
-    public static final int ELSE_KWD = 11;
+    public static final int ELSE_KWD = 11; 
     public static final int DIV_OP = 12;
     public static final int PLUS_OP = 13;
     public static final int SUB_OP = 14;
@@ -58,9 +59,9 @@ class StateTranstionTable {
 
 
     public static final int[][] STATE_TRANSITION_TABLE = {
-    { VAR_IDF, INT_LIT, -1,        PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_STATE, OPEN_PAREN, CLOSE_PAREN, -1,    E_STATE, VAR_IDF, VAR_IDF, I_STATE, F_STATE, W_STATE, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF }, // START
-    { -1,      INT_LIT, DOT_STATE, -1,      -1,     -1,      -1,     -1,        -1,        -1,         -1,         -1,         -1,          -1,    -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1      }, // INT_LIT
-    // ...one row like this for every state, in the same order as your row constants
+    { START, INT_LIT, FLOAT_LIT, VAR_IDF, OPEN_PAREN, CLOSE_PAREN, WHILE_KWD, IN_KWD, IF_KWD, FOR_KWD, ELIF_KWD, ELSE_KWD, DIV_OP, PLUS_OP, SUB_OP, ASSIGN_OP, EQUAL_OP, MULT_OP, INEQUAL_OP, GREATER_OP, GREATER_EQUAL_OP, LESSER_OP, LESSER_EQUAL_OP
+    
+    }
 };
 
     public static void main(String[] args) {
@@ -82,7 +83,7 @@ class StateTranstionTable {
     }
 
     // helper function
-    public int getColumn(char c) {
+    public static int getColumn(char c) {
         if (Character.isLetter(c)) return LETTER;
         if (Character.isDigit(c)) return DIGIT;
         if (Character.isWhitespace(c)) return WS;
