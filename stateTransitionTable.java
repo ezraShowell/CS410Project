@@ -156,7 +156,6 @@ class StateTranstionTable {
 
     // helper function
     public static int getColumn(char c) {
-<<<<<<< HEAD
         if (Character.isLetter(c)) {
             switch (c) {
                 case 'e': return E_COL;
@@ -174,25 +173,6 @@ class StateTranstionTable {
         }
         if (Character.isDigit(c)) return DIGIT;
         if (Character.isWhitespace(c)) return -2; // whitespace - skip
-=======
-        switch (c) {
-            case 'e': return E_COL;
-            case 'l': return L_COL;
-            case 's': return S_COL;
-            case 'i': return I_COL;
-            case 'f': return F_COL;
-            case 'w': return W_COL;
-            case 'h': return H_COL;
-            case 'o': return O_COL;
-            case 'r': return R_COL;
-            case 'n': return N_COL;
-            case '_': return LETTER; // underscore is considered a letter for identifiers
-        }
-
-        if (Character.isLetter(c)) return LETTER;
-        
-        if (Character.isDigit(c)) return DIGIT;
->>>>>>> main
         
         switch (c) {
             case '.': return DOT;
