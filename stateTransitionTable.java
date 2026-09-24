@@ -60,8 +60,8 @@ class StateTranstionTable {
 
 
     public static final int[][] STATE_TRANSITION_TABLE = {
-    { VAR_IDF, INT_LIT, -1,        PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_STATE, OPEN_PAREN, CLOSE_PAREN, -1,    E_STATE, VAR_IDF, VAR_IDF, I_STATE, F_STATE, W_STATE, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF }, // START
-    { -1,      INT_LIT, DOT_STATE, -1,      -1,     -1,      -1,     -1,        -1,        -1,         -1,         -1,         -1,          -1,    -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1      }, // INT_LIT
+    { VAR_IDF, INT_LIT, -1,        PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, 0, OPEN_PAREN, CLOSE_PAREN, -1,    0, VAR_IDF, VAR_IDF, 0, 0, 0, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF }, // START
+    { -1,      INT_LIT, 0, -1,      -1,     -1,      -1,     -1,        -1,        -1,         -1,         -1,         -1,          -1,    -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1,      -1      }, // INT_LIT
     // ...one row like this for every state, in the same order as your row constants
 };
 
@@ -94,7 +94,7 @@ class StateTranstionTable {
  
             if (col == WHITESPACE) {
                 if (row != START) {
-                    emitToken(lexeme);
+                    emitToken(row, lexeme);
                 } // else: whitespace between tokens, nothing to flush
                 row = START;
                 lexeme.setLength(0);
@@ -112,10 +112,10 @@ class StateTranstionTable {
             if (next == -1) {
                 // dead transition
                 if (row != START) {
-                    emitToken(lexeme);
+                    emitToken(row, lexeme);
                     row = START;
                     lexeme.setLength(0);
-                    // do no advance pos, reprocess from START
+                    // do no advance pos
                     continue;
                 } else {
                     System.out.println("Error: Invalid token at position " + pos + " ('" + c + "')");
@@ -123,9 +123,6 @@ class StateTranstionTable {
                 }
             }
  
-            if (row == START) {
-                tokenStart = pos;
-            }
             row = next;
             lexeme.append(c);
             pos++;
@@ -133,7 +130,7 @@ class StateTranstionTable {
  
         // flush whatever token was still being built
         if (row != START) {
-            emitToken(lexeme);
+            emitToken(row, lexeme);
         }
     }
  
@@ -177,7 +174,7 @@ class StateTranstionTable {
         }
 }
     
-    public static getType (int state) {
+    public static String getType (int state) {
         switch (state) {
             case INT_LIT: return "CON";
             case FLOAT_LIT: return "CON";
