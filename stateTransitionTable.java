@@ -73,8 +73,50 @@ class StateTranstionTable {
     public static final int LESSER_EQUAL_OP = 35;
     public static final int COLON_SYM = 36;
     public static final int NUM_ROWS = 37;
+    public static final int OR_KWD = 25;
 
-
+    public static final int[][] STATE_TRANSITION_TABLE = {
+        {LETTER, DIGIT, DOT, PLUS, MINUS, STAR, SLASH, EQUAL, LESS, GREATER, BANG, LPAREN, RPAREN, E_COL, L_COL, S_COL, I_COL, F_COL, W_COL, H_COL, O_COL, R_COL, N_COL, COLON, COL_OTHER, NUM_COLS},
+        {VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, CLOSE_PAREN, S_E, S_L, S_S, S_I, S_F, S_W, S_H, S_O, S_R, S_N, COLON_SYM, NUM_ROWS}, // START
+        {}, // INT_LIT
+        {}, // INT_DOT
+        {}, // FLOAT_LIT
+        {}, // VAR_IDF
+        {}, // OPEN_PAREN
+        {}, // CLOSE_PAREN
+        {}, // S_W
+        {}, // S_WH
+        {}, // S_WHI
+        {}, // S_WHIL
+        {}, // WHILE_KWD
+        {}, // S_I
+        {}, // IN_KWD
+        {}, // IF_KWD
+        {}, // S_F
+        {}, // S_FO
+        {}, // FOR_KWD
+        {}, // S_E
+        {}, // S_EL
+        {}, // S_ELS
+        {}, // S_ELI
+        {}, // ELIF_KWD
+        {}, // ELSE_KWD
+        {}, // DIV_OP
+        {}, // PLUS_OP
+        {}, // SUB_OP
+        {}, // ASSIGN_OP
+        {}, // EQUAL_OP
+        {}, // MULT_OP
+        {}, // BANG_OP
+        {}, // INEQUAL_OP
+        {}, // GREATER_OP
+        {}, // GREATER_EQUAL_OP
+        {}, // LESSER_OP
+        {}, // LESSER_EQUAL_OP
+        {}, // COLON_SYM
+        {}, // NUM_ROWS
+        {}, // OR_KWD
+    };
     
 };
 
