@@ -87,7 +87,6 @@ class StateTranstionTable {
         int pos = 0;
         int row = START;
         StringBuilder lexeme = new StringBuilder();
-        int tokenStart = 0;
  
         while (pos < lines.length()) {
             char c = lines.charAt(pos);
@@ -95,7 +94,7 @@ class StateTranstionTable {
  
             if (col == WHITESPACE) {
                 if (row != START) {
-                    emitToken(row, lexeme, tokenStart);
+                    emitToken(lexeme);
                 } // else: whitespace between tokens, nothing to flush
                 row = START;
                 lexeme.setLength(0);
@@ -113,7 +112,7 @@ class StateTranstionTable {
             if (next == -1) {
                 // dead transition
                 if (row != START) {
-                    emitToken(row, lexeme, tokenStart);
+                    emitToken(lexeme);
                     row = START;
                     lexeme.setLength(0);
                     // do no advance pos, reprocess from START
@@ -134,13 +133,12 @@ class StateTranstionTable {
  
         // flush whatever token was still being built
         if (row != START) {
-            emitToken(row, lexeme, tokenStart);
+            emitToken(lexeme);
         }
     }
  
-    private static void emitToken(int row, StringBuilder lexeme, int tokenStart) {
-        String name = (row >= 0 && row < ROW_NAMES.length) ? ROW_NAMES[row] : ("STATE_" + row);
-        System.out.println(name + "\t\"" + lexeme + "\"\tat position " + tokenStart);
+    private static void emitToken(StringBuilder lexeme) {
+        System.out.print(lexeme + "\t");
     }
 
     // helper function
