@@ -107,7 +107,7 @@ class StateTranstionTable {
  
             if (col == WHITESPACE) {
                 if (row != START) {
-                    emitToken(lexeme);
+                    emitToken(row, lexeme);
                 } // else: whitespace between tokens, nothing to flush
                 row = START;
                 lexeme.setLength(0);
@@ -125,10 +125,10 @@ class StateTranstionTable {
             if (next == -1) {
                 // dead transition
                 if (row != START) {
-                    emitToken(lexeme);
+                    emitToken(row, lexeme);
                     row = START;
                     lexeme.setLength(0);
-                    // do no advance pos, reprocess from START
+                    // do no advance pos
                     continue;
                 } else {
                     System.out.println("Error: Invalid token at position " + pos + " ('" + c + "')");
@@ -136,9 +136,6 @@ class StateTranstionTable {
                 }
             }
  
-            if (row == START) {
-                tokenStart = pos;
-            }
             row = next;
             lexeme.append(c);
             pos++;
@@ -146,7 +143,7 @@ class StateTranstionTable {
  
         // flush whatever token was still being built
         if (row != START) {
-            emitToken(lexeme);
+            emitToken(row, lexeme);
         }
     }
  
@@ -156,23 +153,23 @@ class StateTranstionTable {
 
     // helper function
     public static int getColumn(char c) {
-        if (Character.isLetter(c)) {
-            switch (c) {
-                case 'e': return E_COL;
-                case 'l': return L_COL;
-                case 's': return S_COL;
-                case 'i': return I_COL;
-                case 'f': return F_COL;
-                case 'w': return W_COL;
-                case 'h': return H_COL;
-                case 'o': return O_COL;
-                case 'r': return R_COL;
-                case 'n': return N_COL;
-                default:  return LETTER; // any other letter
-            }   
+        switch (c) {
+            case 'e': return E_COL;
+            case 'l': return L_COL;
+            case 's': return S_COL;
+            case 'i': return I_COL;
+            case 'f': return F_COL;
+            case 'w': return W_COL;
+            case 'h': return H_COL;
+            case 'o': return O_COL;
+            case 'r': return R_COL;
+            case 'n': return N_COL;
+            case '_': return LETTER; // underscore is considered a letter for identifiers
         }
+
+        if (Character.isLetter(c)) return LETTER;
+        
         if (Character.isDigit(c)) return DIGIT;
-        if (Character.isWhitespace(c)) return -2; // whitespace - skip
         
         switch (c) {
             case '.': return DOT;
@@ -191,7 +188,7 @@ class StateTranstionTable {
         }
 }
     
-    public static getType (int state) {
+    public static String getType (int state) {
         switch (state) {
             case INT_LIT: return "CON";
             case FLOAT_LIT: return "CON";
