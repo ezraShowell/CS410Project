@@ -1,6 +1,9 @@
-import java.io.*;
-import java.util.*;
-import java.nio.file.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 class StateTransitionTable {
 
@@ -78,8 +81,8 @@ class StateTransitionTable {
     
 
     public static final int[][] STATE_TRANSITION_TABLE = {
-        {LETTER, DIGIT, DOT, PLUS, MINUS, STAR, SLASH, EQUAL, LESS, GREATER, BANG, LPAREN, RPAREN, E_COL, L_COL, S_COL, I_COL, F_COL, W_COL, H_COL, O_COL, R_COL, N_COL, COLON, COL_OTHER, NUM_COLS},
-        {VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, CLOSE_PAREN, S_E, -1, -1, S_I, S_F, S_W, -1, S_O, -1, -1, COLON_SYM, NUM_ROWS}, // START
+        {LETTER, DIGIT, DOT, PLUS, MINUS, STAR, SLASH, EQUAL, LESS, GREATER, BANG, LPAREN, RPAREN, E_COL, L_COL, S_COL, I_COL, F_COL, W_COL, H_COL, O_COL, R_COL, N_COL, COLON, COL_OTHER},
+        {VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, CLOSE_PAREN, S_E, VAR_IDF, VAR_IDF, S_I, S_F, S_W, VAR_IDF, S_O, VAR_IDF, VAR_IDF, COLON_SYM}, // START
         {}, // INT_LIT
         {}, // INT_DOT
         {}, // FLOAT_LIT
@@ -210,9 +213,13 @@ class StateTransitionTable {
             case '_': return LETTER; // underscore is considered a letter for identifiers
         }
 
-        if (Character.isLetter(c)) return LETTER;
+        if (Character.isLetter(c)) {
+			return LETTER;
+		}
         
-        if (Character.isDigit(c)) return DIGIT;
+        if (Character.isDigit(c)) {
+			return DIGIT;
+		}
         
         switch (c) {
             case '.': return DOT;
