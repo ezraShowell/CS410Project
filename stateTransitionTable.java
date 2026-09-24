@@ -81,8 +81,8 @@ class StateTransitionTable {
     
 
     public static final int[][] STATE_TRANSITION_TABLE = {
-        {LETTER, DIGIT, DOT, PLUS, MINUS, STAR, SLASH, EQUAL, LESS, GREATER, BANG, LPAREN, RPAREN, E_COL, L_COL, S_COL, I_COL, F_COL, W_COL, H_COL, O_COL, R_COL, N_COL, COLON, COL_OTHER},
-        {VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, CLOSE_PAREN, S_E, VAR_IDF, VAR_IDF, S_I, S_F, S_W, VAR_IDF, S_O, VAR_IDF, VAR_IDF, COLON_SYM}, // START
+        //{LETTER, DIGIT, DOT, PLUS, MINUS, STAR, SLASH, EQUAL, LESS, GREATER, BANG, LPAREN, RPAREN, E_COL, L_COL, S_COL, I_COL, F_COL, W_COL, H_COL, O_COL, R_COL, N_COL, COLON, COL_OTHER},
+        {VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, -1, S_E, VAR_IDF, VAR_IDF, S_I, S_F, S_W, VAR_IDF, S_O, VAR_IDF, VAR_IDF, COLON_SYM}, // START
         {}, // INT_LIT
         {}, // INT_DOT
         {}, // FLOAT_LIT
@@ -234,6 +234,7 @@ class StateTransitionTable {
             case '(': return LPAREN;
             case ')': return RPAREN;
             case ':': return COLON;
+            case ' ': case '\t': case '\n': case '\r': return WHITESPACE;
             default:  return COL_OTHER;
         }
 }
