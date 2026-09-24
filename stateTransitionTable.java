@@ -137,8 +137,8 @@ class StateTranstionTable {
         }
     }
  
-    private static void emitToken(StringBuilder lexeme) {
-        System.out.print(lexeme + "\t");
+    private static void emitToken(int row, StringBuilder lexeme) {
+        System.out.print(lexeme + "~" + getType(row) + "\t");
     }
 
     // helper function
@@ -176,6 +176,34 @@ class StateTranstionTable {
             default:  return COL_OTHER;
         }
 }
+    
+    public static getType (int state) {
+        switch (state) {
+            case INT_LIT: return "CON";
+            case FLOAT_LIT: return "CON";
+            case VAR_IDF: return "VAR";
+            case OPEN_PAREN: return "SYM";
+            case CLOSE_PAREN: return "SYM";
+            case WHILE_KWD: return "KWD";
+            case IN_KWD: return "KWD";
+            case IF_KWD: return "KWD";
+            case FOR_KWD: return "KWD";
+            case ELIF_KWD: return "KWD";
+            case ELSE_KWD: return "KWD";
+            case DIV_OP: return "OP";
+            case PLUS_OP: return "OP";
+            case SUB_OP: return "OP";
+            case ASSIGN_OP: return "OP";
+            case EQUAL_OP: return "OP";
+            case MULT_OP: return "OP";
+            case INEQUAL_OP: return "OP";
+            case GREATER_OP: return "OP";
+            case GREATER_EQUAL_OP: return "OP";
+            case LESSER_OP: return "OP";
+            case LESSER_EQUAL_OP: return "OP";
+            default: return null;
+        }
+    }
 
 
 }
