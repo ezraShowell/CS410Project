@@ -1,6 +1,6 @@
-import java.util.Scanner;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
 class StateTranstionTable {
 
@@ -30,6 +30,8 @@ class StateTranstionTable {
     public static final int N_COL = 22;      // n
     public static final int UNDERSCORE = 23; // _
     public static final int COL_OTHER = 24;  // other characters
+
+    public static final int WHITESPACE = -2; // hard-coded
 
     // rows
     public static final int START = 0;
@@ -63,29 +65,103 @@ class StateTranstionTable {
     // ...one row like this for every state, in the same order as your row constants
 };
 
-    public static void main(String[] args) {
-
-            // scanner logic\
-                // follow fsm, (i.e if character is "i", check next character if it 
-                // is "f" then it is a keyword, else it is an identifier)
-
-            // remember to actually make the input file with valid syntax
-            try(Scanner scanner = new Scanner(new File("input.txt"))){
-                while(scanner.hasNextLine()){
-                    String line = scanner.nextLine();
+    public static void main(String[] args) throws IOException {
+ 
+        System.out.println("Lexical Analyzer, please enter your input file absolute path: ");
+        BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+        String inputFile = stdin.readLine();
+ 
+        Path filePath = Paths.get(inputFile);
+        String lines;
+        try {
+            if (!Files.exists(filePath)) {
+                System.out.println("File does not exist.");
+                return;
+            }
+            lines = Files.readString(filePath);
+        } catch (Exception e) {
+            System.out.println("Error checking file existence: " + e.getMessage());
+            return;
+        }
+ 
+        int pos = 0;
+        int row = START;
+        StringBuilder lexeme = new StringBuilder();
+        int tokenStart = 0;
+ 
+        while (pos < lines.length()) {
+            char c = lines.charAt(pos);
+            int col = getColumn(c);
+ 
+            if (col == WHITESPACE) {
+                if (row != START) {
+                    emitToken(row, lexeme, tokenStart);
+                } // else: whitespace between tokens, nothing to flush
+                row = START;
+                lexeme.setLength(0);
+                pos++;
+                continue;
+            }
+ 
+            if (col == COL_OTHER) {
+                System.out.println("Error: Invalid character '" + c + "' at position " + pos);
+                return;
+            }
+ 
+            int next = STATE_TRANSITION_TABLE[row][col];
+ 
+            if (next == -1) {
+                // dead transition
+                if (row != START) {
+                    emitToken(row, lexeme, tokenStart);
+                    row = START;
+                    lexeme.setLength(0);
+                    // do no advance pos, reprocess from START
+                    continue;
+                } else {
+                    System.out.println("Error: Invalid token at position " + pos + " ('" + c + "')");
+                    return;
                 }
             }
-            catch (FileNotFoundException e) {
-                e.printStackTrace();
+ 
+            if (row == START) {
+                tokenStart = pos;
             }
-                
+            row = next;
+            lexeme.append(c);
+            pos++;
+        }
+ 
+        // flush whatever token was still being built
+        if (row != START) {
+            emitToken(row, lexeme, tokenStart);
+        }
+    }
+ 
+    private static void emitToken(int row, StringBuilder lexeme, int tokenStart) {
+        String name = (row >= 0 && row < ROW_NAMES.length) ? ROW_NAMES[row] : ("STATE_" + row);
+        System.out.println(name + "\t\"" + lexeme + "\"\tat position " + tokenStart);
     }
 
     // helper function
-    public int getColumn(char c) {
-        if (Character.isLetter(c)) return LETTER;
+    public static int getColumn(char c) {
+        if (Character.isLetter(c)) {
+            switch (c) {
+                case 'e': return E_COL;
+                case 'l': return L_COL;
+                case 's': return S_COL;
+                case 'i': return I_COL;
+                case 'f': return F_COL;
+                case 'w': return W_COL;
+                case 'h': return H_COL;
+                case 'o': return O_COL;
+                case 'r': return R_COL;
+                case 'n': return N_COL;
+                default:  return LETTER; // any other letter
+            }   
+        }
         if (Character.isDigit(c)) return DIGIT;
-        if (Character.isWhitespace(c)) return WS;
+        if (Character.isWhitespace(c)) return -2; // whitespace - skip
         
         switch (c) {
             case '.': return DOT;
