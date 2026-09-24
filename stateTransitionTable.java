@@ -35,33 +35,45 @@ class StateTranstionTable {
     // rows
     public static final int START = 0;
     public static final int INT_LIT = 1;
-    public static final int FLOAT_LIT = 2;
-    public static final int VAR_IDF = 3;
-    public static final int OPEN_PAREN = 4;
-    public static final int CLOSE_PAREN = 5;
-    public static final int WHILE_KWD = 6;
-    public static final int IN_KWD = 7;
-    public static final int IF_KWD = 8;
-    public static final int FOR_KWD = 9;
-    public static final int ELIF_KWD = 10;
-    public static final int ELSE_KWD = 11; 
-    public static final int DIV_OP = 12;
-    public static final int PLUS_OP = 13;
-    public static final int SUB_OP = 14;
-    public static final int ASSIGN_OP = 15;
-    public static final int EQUAL_OP = 16;
-    public static final int MULT_OP = 17;
-    public static final int INEQUAL_OP = 18;
-    public static final int GREATER_OP = 19;
-    public static final int GREATER_EQUAL_OP = 20;
-    public static final int LESSER_OP = 21;
-    public static final int LESSER_EQUAL_OP = 22;
+    public static final int INT_DOT = 2;
+    public static final int FLOAT_LIT = 3;
+    public static final int VAR_IDF = 4;
+    public static final int OPEN_PAREN = 5;
+    public static final int CLOSE_PAREN = 6;
+    public static final int S_W = 7;
+    public static final int S_WH = 8;
+    public static final int S_WHI = 9;
+    public static final int S_WHIL = 10;
+    public static final int WHILE_KWD = 11;
+    public static final int S_I = 12;
+    public static final int IN_KWD = 13;
+    public static final int IF_KWD = 14;
+    public static final int S_F = 15;
+    public static final int S_FO = 16;
+    public static final int FOR_KWD = 17;
+    public static final int S_E = 18;
+    public static final int S_EL = 19;
+    public static final int S_ELS = 20;
+    public static final int S_ELI = 21;
+    public static final int ELIF_KWD = 22;
+    public static final int ELSE_KWD = 23;
+    public static final int DIV_OP = 24;
+    public static final int PLUS_OP = 25;
+    public static final int SUB_OP = 26;
+    public static final int ASSIGN_OP = 27;
+    public static final int EQUAL_OP = 28;
+    public static final int MULT_OP = 29;
+    public static final int BANG_OP = 30;
+    public static final int INEQUAL_OP = 31;
+    public static final int GREATER_OP = 32;
+    public static final int GREATER_EQUAL_OP = 33;
+    public static final int LESSER_OP = 34;
+    public static final int LESSER_EQUAL_OP = 35;
+    public static final int COLON_SYM = 36;
+    public static final int NUM_ROWS = 37;
 
 
-    public static final int[][] STATE_TRANSITION_TABLE = {
-    { START, INT_LIT, FLOAT_LIT, VAR_IDF, OPEN_PAREN, CLOSE_PAREN, WHILE_KWD, IN_KWD, IF_KWD, FOR_KWD, ELIF_KWD, ELSE_KWD, DIV_OP, PLUS_OP, SUB_OP, ASSIGN_OP, EQUAL_OP, MULT_OP, INEQUAL_OP, GREATER_OP, GREATER_EQUAL_OP, LESSER_OP, LESSER_EQUAL_OP
     
-    }
 };
 
     public static void main(String[] args) {
@@ -84,9 +96,23 @@ class StateTranstionTable {
 
     // helper function
     public static int getColumn(char c) {
+        switch (c) {
+            case 'e': return E_COL;
+            case 'l': return L_COL;
+            case 's': return S_COL;
+            case 'i': return I_COL;
+            case 'f': return F_COL;
+            case 'w': return W_COL;
+            case 'h': return H_COL;
+            case 'o': return O_COL;
+            case 'r': return R_COL;
+            case 'n': return N_COL;
+            case '_': return LETTER; // underscore is considered a letter for identifiers
+        }
+
         if (Character.isLetter(c)) return LETTER;
+        
         if (Character.isDigit(c)) return DIGIT;
-        if (Character.isWhitespace(c)) return WS;
         
         switch (c) {
             case '.': return DOT;
@@ -100,6 +126,7 @@ class StateTranstionTable {
             case '!': return BANG;
             case '(': return LPAREN;
             case ')': return RPAREN;
+            case ':': return COLON;
             default:  return COL_OTHER;
         }
 }
