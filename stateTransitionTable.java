@@ -1,8 +1,8 @@
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
+import java.nio.file.*;
 
-class StateTranstionTable {
+class StateTransitionTable {
 
     // columns
     public static final int LETTER = 0;      // a-z, A-Z
@@ -72,12 +72,14 @@ class StateTranstionTable {
     public static final int LESSER_OP = 34;
     public static final int LESSER_EQUAL_OP = 35;
     public static final int COLON_SYM = 36;
-    public static final int NUM_ROWS = 37;
-    public static final int OR_KWD = 25;
+    public static final int S_O = 37;
+    public static final int OR_KWD = 38;
+    public static final int NUM_ROWS = 39;
+    
 
     public static final int[][] STATE_TRANSITION_TABLE = {
         {LETTER, DIGIT, DOT, PLUS, MINUS, STAR, SLASH, EQUAL, LESS, GREATER, BANG, LPAREN, RPAREN, E_COL, L_COL, S_COL, I_COL, F_COL, W_COL, H_COL, O_COL, R_COL, N_COL, COLON, COL_OTHER, NUM_COLS},
-        {VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, CLOSE_PAREN, S_E, S_L, S_S, S_I, S_F, S_W, S_H, S_O, S_R, S_N, COLON_SYM, NUM_ROWS}, // START
+        {VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, CLOSE_PAREN, S_E, -1, -1, S_I, S_F, S_W, -1, S_O, -1, -1, COLON_SYM, NUM_ROWS}, // START
         {}, // INT_LIT
         {}, // INT_DOT
         {}, // FLOAT_LIT
@@ -118,7 +120,6 @@ class StateTranstionTable {
         {}, // OR_KWD
     };
     
-};
 
     public static void main(String[] args) throws IOException {
  
