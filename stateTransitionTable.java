@@ -82,7 +82,6 @@ class StateTransitionTable {
     
     // total number of row constants
     public static final int NUM_ROWS = 39;
-    
 
     public static final int[][] STATE_TRANSITION_TABLE = {
         //{LETTER, DIGIT, DOT, PLUS, MINUS, STAR, SLASH, EQUAL, LESS, GREATER, BANG, LPAREN, RPAREN, E_COL, L_COL, S_COL, I_COL, F_COL, W_COL, H_COL, O_COL, R_COL, N_COL, COLON, COL_OTHER},
@@ -147,8 +146,8 @@ class StateTransitionTable {
             return;
         }
  
-        int pos = 0;
-        int row = START;
+        int pos = 0; // 0
+        int row = START; // 0 
         StringBuilder lexeme = new StringBuilder();
  
         while (pos < lines.length()) {
@@ -165,7 +164,8 @@ class StateTransitionTable {
                 pos++;
                 continue;
             }
- 
+
+            // if it didn't match anything, our parser can't read it
             if (col == COL_OTHER) {
                 System.out.println("Error: Invalid character '" + c + "' at position " + pos);
                 return;
@@ -199,7 +199,7 @@ class StateTransitionTable {
     }
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private static void emitToken(int row, StringBuilder lexeme) {
-        System.out.print(lexeme + "~" + getType(row) + "\t");
+        System.out.println(lexeme + "~" + getType(row) + "\t");
     }
 
     // helper function
@@ -249,30 +249,29 @@ class StateTransitionTable {
 		if (state == S_W || state == S_WH || state == S_WHI || state == S_WHIL || state == S_I || state == S_F || state == S_FO || state == S_E || state == S_EL || state == S_ELS || state == S_ELI || state == S_O) {
 			return "VAR";
 		}
-    	
         switch (state) {
             case INT_LIT: return "CON";
             case FLOAT_LIT: return "CON";
             case VAR_IDF: return "VAR";
             case OPEN_PAREN: return "SYM";
             case CLOSE_PAREN: return "SYM";
-            case WHILE_KWD: return "KWD";
-            case IN_KWD: return "KWD";
-            case IF_KWD: return "KWD";
-            case FOR_KWD: return "KWD";
-            case ELIF_KWD: return "KWD";
-            case ELSE_KWD: return "KWD";
-            case DIV_OP: return "OP";
-            case PLUS_OP: return "OP";
-            case SUB_OP: return "OP";
-            case ASSIGN_OP: return "OP";
-            case EQUAL_OP: return "OP";
-            case MULT_OP: return "OP";
-            case INEQUAL_OP: return "OP";
-            case GREATER_OP: return "OP";
-            case GREATER_EQUAL_OP: return "OP";
-            case LESSER_OP: return "OP";
-            case LESSER_EQUAL_OP: return "OP";
+            case WHILE_KWD: return "WHILE_KWD";
+            case IN_KWD: return "_INKWD";
+            case IF_KWD: return "IF_KWD";
+            case FOR_KWD: return "FOR_KWD";
+            case ELIF_KWD: return "ELIF_KWD";
+            case ELSE_KWD: return "ELSE_KWD";
+            case DIV_OP: return "DIV_OP";
+            case PLUS_OP: return "PLUS_OP";
+            case SUB_OP: return "SUB_OP";
+            case ASSIGN_OP: return "ASSIGN_OP";
+            case EQUAL_OP: return "EQUAL_OP";
+            case MULT_OP: return "MULT_OP";
+            case INEQUAL_OP: return "INEQUAL_OP";
+            case GREATER_OP: return "GREATER_OP";
+            case GREATER_EQUAL_OP: return "GREATER_EQUAL_OP";
+            case LESSER_OP: return "LESSER_OP";
+            case LESSER_EQUAL_OP: return "LESSER_EQUAL_OP";
             default: return null;
         }
     }
@@ -281,3 +280,4 @@ class StateTransitionTable {
 
 
 }
+
