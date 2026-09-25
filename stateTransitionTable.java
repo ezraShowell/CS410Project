@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 class StateTransitionTable {
 
-    // columns
+    // columns/transitions
     public static final int LETTER = 0;      // a-z, A-Z
     public static final int DIGIT = 1;       // 0-9
     public static final int DOT = 2;         // . (for floats)
@@ -33,11 +33,13 @@ class StateTransitionTable {
     public static final int N_COL = 22;      // n
     public static final int COLON = 23;      // :
     public static final int COL_OTHER = 24;  // other characters
+    
+    // total number of column constants
     public static final int NUM_COLS = 25;   // number of columns
 
-    public static final int WHITESPACE = -2; // hard-coded
+    public static final int WHITESPACE = -2; // arbitrary
 
-    // rows
+    // rows/states
     public static final int START = 0;
     public static final int INT_LIT = 1;
     public static final int INT_DOT = 2;
@@ -77,50 +79,52 @@ class StateTransitionTable {
     public static final int COLON_SYM = 36;
     public static final int S_O = 37;
     public static final int OR_KWD = 38;
+    
+    // total number of row constants
     public static final int NUM_ROWS = 39;
     
 
     public static final int[][] STATE_TRANSITION_TABLE = {
         //{LETTER, DIGIT, DOT, PLUS, MINUS, STAR, SLASH, EQUAL, LESS, GREATER, BANG, LPAREN, RPAREN, E_COL, L_COL, S_COL, I_COL, F_COL, W_COL, H_COL, O_COL, R_COL, N_COL, COLON, COL_OTHER},
-        {VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, -1, S_E, VAR_IDF, VAR_IDF, S_I, S_F, S_W, VAR_IDF, S_O, VAR_IDF, VAR_IDF, COLON_SYM}, // START
-        {}, // INT_LIT
-        {}, // INT_DOT
-        {}, // FLOAT_LIT
-        {}, // VAR_IDF
-        {}, // OPEN_PAREN
-        {}, // CLOSE_PAREN
-        {}, // S_W
-        {}, // S_WH
-        {}, // S_WHI
-        {}, // S_WHIL
-        {}, // WHILE_KWD
-        {}, // S_I
-        {}, // IN_KWD
-        {}, // IF_KWD
-        {}, // S_F
-        {}, // S_FO
-        {}, // FOR_KWD
-        {}, // S_E
-        {}, // S_EL
-        {}, // S_ELS
-        {}, // S_ELI
-        {}, // ELIF_KWD
-        {}, // ELSE_KWD
-        {}, // DIV_OP
-        {}, // PLUS_OP
-        {}, // SUB_OP
-        {}, // ASSIGN_OP
-        {}, // EQUAL_OP
-        {}, // MULT_OP
-        {}, // BANG_OP
-        {}, // INEQUAL_OP
-        {}, // GREATER_OP
-        {}, // GREATER_EQUAL_OP
-        {}, // LESSER_OP
-        {}, // LESSER_EQUAL_OP
-        {}, // COLON_SYM
-        {}, // NUM_ROWS
-        {}, // OR_KWD
+        {VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, -1, S_E, VAR_IDF, VAR_IDF, S_I, S_F, S_W, VAR_IDF, S_O, VAR_IDF, VAR_IDF, COLON_SYM, -1}, // START
+        {-1, INT_LIT, INT_DOT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // INT_LIT
+        {-1, FLOAT_LIT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // INT_DOT
+        {-1, FLOAT_LIT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // FLOAT_LIT
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // VAR_IDF
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, CLOSE_PAREN, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // OPEN_PAREN
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // CLOSE_PAREN
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, S_WH, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // S_W
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, S_WHI, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // S_WH
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, S_WHIL, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // S_WHI
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, WHILE_KWD, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // S_WHIL
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // WHILE_KWD
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, IF_KWD, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, IN_KWD, -1, -1}, // S_I
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // IN_KWD
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // IF_KWD
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, S_FO, VAR_IDF, VAR_IDF, -1, -1}, // S_F
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, FOR_KWD, VAR_IDF, -1, -1}, // S_FO
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // FOR_KWD
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, S_EL, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // S_E
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, S_ELS, S_ELI, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // S_EL
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, ELSE_KWD, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // S_ELS
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, ELIF_KWD, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // S_ELI
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // ELIF_KWD
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // ELSE_KWD
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // DIV_OP
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // PLUS_OP
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // SUB_OP
+        {-1, -1, -1, -1, -1, -1, -1, EQUAL_OP, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // ASSIGN_OP
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // EQUAL_OP
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // MULT_OP
+        {-1, -1, -1, -1, -1, -1, -1, INEQUAL_OP, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // BANG_OP
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // INEQUAL_OP
+        {-1, -1, -1, -1, -1, -1, -1, GREATER_EQUAL_OP, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // GREATER_OP
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // GREATER_EQUAL_OP
+        {-1, -1, -1, -1, -1, -1, -1, LESSER_EQUAL_OP, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // LESSER_OP
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // LESSER_EQUAL_OP
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // COLON_SYM
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, OR_KWD, VAR_IDF, -1, -1}, // S_O
+        {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // OR_KWD
     };
     
 
@@ -192,7 +196,7 @@ class StateTransitionTable {
             emitToken(row, lexeme);
         }
     }
- 
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private static void emitToken(int row, StringBuilder lexeme) {
         System.out.print(lexeme + "~" + getType(row) + "\t");
     }
