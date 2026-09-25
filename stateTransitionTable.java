@@ -86,12 +86,12 @@ class StateTransitionTable {
 
     public static final int[][] STATE_TRANSITION_TABLE = {
         //{LETTER, DIGIT, DOT, PLUS, MINUS, STAR, SLASH, EQUAL, LESS, GREATER, BANG, LPAREN, RPAREN, E_COL, L_COL, S_COL, I_COL, F_COL, W_COL, H_COL, O_COL, R_COL, N_COL, COLON, COL_OTHER},
-        {VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, -1, S_E, VAR_IDF, VAR_IDF, S_I, S_F, S_W, VAR_IDF, S_O, VAR_IDF, VAR_IDF, COLON_SYM, -1}, // START
+    	{VAR_IDF, INT_LIT, -1, PLUS_OP, SUB_OP, MULT_OP, DIV_OP, ASSIGN_OP, LESSER_OP, GREATER_OP, BANG_OP, OPEN_PAREN, CLOSE_PAREN, S_E, VAR_IDF, VAR_IDF, S_I, S_F, S_W, VAR_IDF, S_O, VAR_IDF, VAR_IDF, COLON_SYM, -1}, // START
         {-1, INT_LIT, INT_DOT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // INT_LIT
         {-1, FLOAT_LIT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // INT_DOT
         {-1, FLOAT_LIT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // FLOAT_LIT
         {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // VAR_IDF
-        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, CLOSE_PAREN, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // OPEN_PAREN
+        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // OPEN_PAREN
         {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // CLOSE_PAREN
         {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, S_WH, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // S_W
         {VAR_IDF, VAR_IDF, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, VAR_IDF, VAR_IDF, VAR_IDF, S_WHI, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, VAR_IDF, -1, -1}, // S_WH
@@ -156,9 +156,10 @@ class StateTransitionTable {
             int col = getColumn(c);
  
             if (col == WHITESPACE) {
-                if (row != START) {
+                if (row != START) { // "if a token is not in progress"
                     emitToken(row, lexeme);
-                } // else: whitespace between tokens, nothing to flush
+                } 
+                // else: whitespace between tokens, nothing to flush
                 row = START;
                 lexeme.setLength(0);
                 pos++;
@@ -174,7 +175,7 @@ class StateTransitionTable {
  
             if (next == -1) {
                 // dead transition
-                if (row != START) {
+                if (row != START) { // "if a token is not in progress"
                     emitToken(row, lexeme);
                     row = START;
                     lexeme.setLength(0);
@@ -202,7 +203,7 @@ class StateTransitionTable {
     }
 
     // helper function
-    public static int getColumn(char c) {
+    public static int getColumn(char c) {    	
         switch (c) {
             case 'e': return E_COL;
             case 'l': return L_COL;
@@ -244,6 +245,11 @@ class StateTransitionTable {
 }
     
     public static String getType (int state) {
+    	// handle when a var_idf is part of a keyword ex: wh, els
+		if (state == S_W || state == S_WH || state == S_WHI || state == S_WHIL || state == S_I || state == S_F || state == S_FO || state == S_E || state == S_EL || state == S_ELS || state == S_ELI || state == S_O) {
+			return "VAR";
+		}
+    	
         switch (state) {
             case INT_LIT: return "CON";
             case FLOAT_LIT: return "CON";
@@ -270,6 +276,8 @@ class StateTransitionTable {
             default: return null;
         }
     }
+    
+    
 
 
 }
