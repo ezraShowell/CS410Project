@@ -57,21 +57,73 @@ class Parser {
             String type = split.length > 1 ? split[1] : "";
 
             switch (lex) {
-                case "(":     type = "open_paren";  break;
-                case ")":     type = "close_paren"; break;
-                case ":":     type = "colon_sym";   break;
-                case "range": type = "range_kwd";   break;
-                case "or":    type = "or_kwd";      break;
-                case "and":   type = "and_kwd";     break;
-                case "in":    type = "in_kwd";      break;
+                case "(": 
+                {    
+                    type = "open_paren";  
+                    break;
+                }
+                case ")":     
+                {
+                    type = "close_paren"; 
+                    break;
+                }
+                case ":":     
+                {
+                    type = "colon_sym";   
+                    break;
+                }
+                case "range": 
+                {
+                    type = "range_kwd";   
+                    break;
+                }
+                case "or":    
+                {
+                    type = "or_kwd";      
+                    break;
+                }
+                case "and":   
+                {
+                    type = "and_kwd";     
+                    break;
+                }
+                case "in":    
+                {
+                    type = "in_kwd";      
+                    break;
+                }
                 default:
                     switch (type) {
-                        case "_INKWD":  type = "in_kwd"; break;
-                        case "CON":     type = lex.contains(".") ? "float_lit" : "int_lit"; break;
-                        case "VAR":     type = "var_idf"; break;
-                        case "SUB_OP":  type = "minus_op"; break;
-                        case "MULT_OP": type = "multi_op"; break;
-                        default:        type = type.toLowerCase(); break;
+                        case "_INKWD":  
+                        {
+                            type = "in_kwd"; 
+                            break;
+                        }
+                        case "CON":     
+                        {
+                            type = lex.contains(".") ? "float_lit" : "int_lit"; 
+                            break;
+                        }
+                        case "VAR":     
+                        {
+                            type = "var_idf"; 
+                            break;
+                        }
+                        case "SUB_OP":  
+                        {
+                            type = "minus_op"; 
+                            break;
+                        }
+                        case "MULT_OP": 
+                        {
+                            type = "multi_op"; 
+                            break;
+                        }
+                        default:   
+                        {     
+                            type = type.toLowerCase(); 
+                            break;
+                        }
                     }
                     break;
             }
@@ -118,7 +170,7 @@ class Parser {
         atoms.add("(" + op + ", " + left + ", " + right + ", " + res + ", " + comp + ", " + dest + ")");
     }
 
-    // Flips comparison code (1..6) so TST jumps when condition is FALSE
+    // Flips comp code so TST jumps when condition is FALSE
     public static int invertComp(int c) {
         switch (c) {
             case 1: return 6; // == -> !=
