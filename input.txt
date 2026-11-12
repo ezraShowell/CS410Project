@@ -1,0 +1,7 @@
+x = 3 + 4 * 2
+if x >= 10:
+    while x > 0:
+        x = x - 1
+else:
+    for i in range(5):
+        x = x + i
