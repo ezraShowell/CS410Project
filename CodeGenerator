@@ -1,3 +1,100 @@
-public class CodeGenerator{
-    
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CodeGenerator {
+	
+	static final int ADD = 2;
+	static final int LW = 13;
+	static final int SW = 14;
+	static final int HLT = 15;
+	
+	static List<Integer> code = new ArrayList<>();
+	static List<String> symbols = new ArrayList<>();
+	static List<int[]> fixups = new ArrayList<>();
+
+	
+	public static void main(String[] args) {
+		
+		try {
+			Path inputPath = Path.of("resources/isample.bin");
+			Path outputPath = Path.of("resources/CGOutput.bin");
+			
+			byte[] data = Files.readAllBytes(inputPath);
+			
+			Files.createFile(outputPath);
+
+			for(int i = 0; i < data.length; i++) {
+				String currentByte = Integer.toHexString(data[i]);
+				Files.writeString(outputPath, currentByte);
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// take atoms.txt
+		// read each line, split it into op, left, right, result, comp, dest
+		// switch (op)
+		// ADD -> genAdd(left, right, result
+		// Sub -> genSub()
+		// ...
+		//write to file
+	}
+	
+	// bits             31-28   27-24   23-20   19-16    15-0 
+	static int to32Bit(int op, int rt, int rx, int ry, int addr) {
+		return (op << 28) + (rt << 24) + (rx << 20) + (ry << 16) + (addr % 0x10000);
+	}
+	
+	static int symbolIndex(String name) {
+		int index = symbols.indexOf(name);
+		if (index == -1) {
+			symbols.add(name);
+			index = symbols.size() - 1;
+			
+		}
+		return index;
+	}
+		
+	static void emitMem(int op, int reg, String name) {
+	    fixups.add(new int[]{code.size(), symbolIndex(name)});
+	    code.add(to32Bit(op, reg, 0, 0, 0));
+	}
+	
+	// atom: (ADD, left, right, result, , )
+	static void add(String left, String right, String result) {
+		emitMem(LW, 2, left);
+		emitMem(LW, 3, right);
+		code.add(to32Bit(ADD, 4, 2, 3, 0));
+		emitMem(SW, 4, result);
+	}
+	
+	static void sub(String left, String right, String result) {
+	    emitMem(LW, 2, left);
+	    emitMem(LW, 3, right);
+	    code.add(encode(SUB, 4, 2, 3, 0));   // ireg4 = ireg2 - ireg3
+	    emitMem(SW, 4, result);
+	}
+	
+	static void write(Path out) throws IOException {
+		code.add(to32Bit(HLT, 0, 0, 0, 0));
+		int dataStart = code.size() * 4;
+		
+		for (int[] f : fixups) {
+	        code.set(f[0], code.get(f[0]) | (dataStart + f[1] * 4));
+		}
+		
+		ByteBuffer buf = ByteBuffer.allocate((code.size() + symbols.size()) * 4); // big-endian
+	    for (int word : code) buf.putInt(word);
+	    for (String s : symbols)
+	        buf.putInt(s.matches("-?\\d+") ? Integer.parseInt(s) : 0); // constants assigned appropriate value and vars/temps assigned 0
+	    Files.write(out, buf.array());
+	}
+	
 }
+
