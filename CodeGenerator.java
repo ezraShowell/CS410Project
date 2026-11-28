@@ -4,11 +4,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CodeGenerator {
 	
 	static final int ADD = 2;
 	static final int SUB = 3;
+	static final int BLE = 10;
+	static final int BGE = 11;
+	static final int BNE = 12;
 	static final int LW = 13;
 	static final int SW = 14;
 	static final int HLT = 15;
@@ -75,6 +80,13 @@ public class CodeGenerator {
 		
 		// every program starts with hlt
 		code.add(to32Bit(HLT, 0, 0, 0, 0));
+
+		for(Object[] f : labelFix){
+			int codeIndex = (Integer) f[0];
+			int target = labels.get((String) f[1]);
+			code.set(codeIndex, code.get(codeIndex) + target);
+
+		}
 		
 		int dataStart = code.size() * 4;
 		
@@ -165,10 +177,57 @@ public class CodeGenerator {
 			case "SUB":
 				sub(left, right, result);
 				break;
+
+			case "LBL":
+				label(dest);
+				break;
+
+			case "TST":
+				tst(left, right, comp, dest);
+				break;
+
+			case "HLT":
+				hlt();
+				break;
 			
 			}
+
 		}
 	}
+
+	// MCIHAELS WORK DOWN HERE HOMIE
+
+	static Map<String, Integer> labels = new HashMap<>();
+	static List<Object[]> labelFix = new ArrayList<>();
+
+	//Records where L1 is 
+	static void label(String name){
+		labels.put(name, code.size() * 4); // next byte address
+	}
+
+	static void emitBranch(int op, int rx, int ry, String label){
+		labelFix.add(new Object[]{code.size(), label});
+		code.add(to32Bit(op, 0, rx, ry, 0));
+	}
 	
+	static void tst(String left, String right, String comp, String dest) {
+		emitMem(LW, 2, left);
+		emitMem(LW, 3, right);
+		switch (Integer.parseInt(comp)) {
+			// LOGAN CAN ADD HERE BEQ, BLT, BGT
+			case 4: emitBranch(BLE, 2, 3, dest); // <=
+			break;
+			case 5: emitBranch(BGE, 2, 3, dest); // >=
+			break;
+			case 6: emitBranch(BNE,2, 3, dest); // !=
+			break;
+			default:
+				break;
+		}
+	}
+	static void hlt(){
+		code.add(to32Bit(HLT,0,0,0,0));
+	}
+
 }
 
